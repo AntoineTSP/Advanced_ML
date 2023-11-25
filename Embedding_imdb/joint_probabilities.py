@@ -1,15 +1,17 @@
 import numpy as np
-import math
+from math import log2, exp
 from tqdm import tqdm
 
 EPSILON = 1e-8
 
 def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLERANCE=1e-5, display_tqdm=False):
     n_samples, n_neighbors = sqdistances.shape
-    desired_entropy = math.log2(perplexity)
+    desired_entropy = log2(perplexity)
 
     P = np.zeros((n_samples, n_neighbors), dtype=np.float64)
 
+    if display_tqdm:
+        print("Computing binary search for conditional probabilities...")
     range_ = tqdm(range(n_samples)) if display_tqdm else range(n_samples)
     for i in range(n_samples):
         beta_min = -np.inf
@@ -20,8 +22,8 @@ def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLER
             sum_Pi = 0.0
             for j in range(n_neighbors):
                 if j != i:
-                    P[i, j] = math.exp(-sqdistances[i, j] * beta)
-                    sum_Pi += P[i, j] # will be used later on to normalier the p_i|j
+                    P[i, j] = exp(-sqdistances[i, j] * beta)
+                    sum_Pi += P[i, j] # will be used later on to normalize the p_i|j's
 
             if sum_Pi == 0.0:
                 sum_Pi = EPSILON # avoid dividing by 0
@@ -50,3 +52,9 @@ def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLER
                     beta = (beta + beta_min) / 2.0
 
     return P
+
+def compute_joint_probabilities(sqdistances, perplexity, n_steps=100, ENTROPY_TOLERANCE=1e-5, display_tqdm=False):
+    n_samples, n_neighbors = sqdistances.shape
+    conditional_probas = binary_search_perplexity(sqdistances, perplexity, n_steps=n_steps, ENTROPY_TOLERANCE=ENTROPY_TOLERANCE, display_tqdm=display_tqdm)
+    
+    return (conditional_probas + conditional_probas.T) / (2 * n_samples)
