@@ -38,10 +38,6 @@ def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLER
             P[i, :] /= sum_Pi
             sum_disti_Pi = np.sum(np.multiply(sqdistances[i, :], P[i, :]))
 
-            #print(f"shape P[i, :]: {P[i, :].shape}")
-            #print(f"shape sqdistances[i, :]: {sqdistances[i, :].shape}")
-            #print(f"shape mult: {sum_disti_Pi.shape}")
-
             shannon_entropy = -np.sum(P[i, :] * log2_with_mask(P[i, :]))
             entropy = shannon_entropy + beta * sum_disti_Pi # beta * sum_disti_Pi acts as a regluarization term
             entropy_diff = entropy - desired_entropy
