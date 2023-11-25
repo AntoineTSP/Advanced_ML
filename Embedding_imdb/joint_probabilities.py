@@ -4,6 +4,12 @@ from tqdm import tqdm
 
 EPSILON = 1e-8
 
+def log2_with_mask(arr):
+    result = np.zeros_like(arr, dtype=np.float64)
+    mask = (arr != 0)
+    result[mask] = np.log2(arr[mask])
+    return result
+
 def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLERANCE=1e-5, display_tqdm=False):
     n_samples, n_neighbors = sqdistances.shape
     desired_entropy = log2(perplexity)
@@ -12,8 +18,9 @@ def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLER
 
     if display_tqdm:
         print("Computing binary search for conditional probabilities...")
+        
     range_ = tqdm(range(n_samples)) if display_tqdm else range(n_samples)
-    for i in range(n_samples):
+    for i in range_:
         beta_min = -np.inf
         beta_max = np.inf
         beta = 1.0 # represents 1/(2 * sigma^2)
@@ -29,9 +36,13 @@ def binary_search_perplexity(sqdistances, perplexity, n_steps=100, ENTROPY_TOLER
                 sum_Pi = EPSILON # avoid dividing by 0
 
             P[i, :] /= sum_Pi
-            sum_disti_Pi = np.multiply(sqdistances[i, :], P[i, :])
+            sum_disti_Pi = np.sum(np.multiply(sqdistances[i, :], P[i, :]))
 
-            shannon_entropy = -np.sum(P[i, :] * np.log2(P[i, :]))
+            #print(f"shape P[i, :]: {P[i, :].shape}")
+            #print(f"shape sqdistances[i, :]: {sqdistances[i, :].shape}")
+            #print(f"shape mult: {sum_disti_Pi.shape}")
+
+            shannon_entropy = -np.sum(P[i, :] * log2_with_mask(P[i, :]))
             entropy = shannon_entropy + beta * sum_disti_Pi # beta * sum_disti_Pi acts as a regluarization term
             entropy_diff = entropy - desired_entropy
 
