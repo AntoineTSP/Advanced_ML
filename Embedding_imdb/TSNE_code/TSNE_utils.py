@@ -4,7 +4,7 @@ from tqdm import tqdm
 from numba import njit, float64
 
 # local imports
-from joint_probabilities import compute_joint_probabilities
+from TSNE_code.joint_probabilities import compute_joint_probabilities
 
 def _compute_squared_distances(X, metric):
     return pairwise_distances(X, metric=metric, squared=True)
