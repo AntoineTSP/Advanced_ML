@@ -9,6 +9,15 @@ from joint_probabilities import compute_joint_probabilities
 def _compute_squared_distances(X, metric):
     return pairwise_distances(X, metric=metric, squared=True)
 
+@njit
+def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
+    gradient = np.zeros((P.shape[0], n_components))
+    for i in range(P.shape[1]):
+        gradient[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
+
+    return gradient
+
+
 class TSNE():
     def __init__(self, n_components, perplexity, early_exaggeration=4, iterations_with_early_exaggeration=50, learning_rate=None, metric="euclidean", n_iter=1000, n_steps_probas=100):
         self.n_components = n_components
@@ -20,30 +29,24 @@ class TSNE():
         self.n_iter = max(250, n_iter)
         self.n_steps_probas = n_steps_probas
 
-    def compute_gradient(self, Y, P, Q, t_student_q_distances):
-        gradient = np.zeros((P.shape[0], self.n_components))
-        for i in range(P.shape[1]):
-            gradient[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
-
-        return gradient
-
-    def fit_transform(self, X, verbose=True):
+    def fit_transform(self, X, verbose=0):
         #squared_distances = pairwise_distances(X, metric=self.metric, squared=True)
         squared_distances = _compute_squared_distances(X, self.metric)
-        P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=self.n_steps_probas, ENTROPY_TOLERANCE=1e-5, display_tqdm=verbose)
+        P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=self.n_steps_probas, ENTROPY_TOLERANCE=1e-5, display_tqdm=(verbose>=2))
 
         # initial solution samples from a multivariate centered normal
         Y = np.random.multivariate_normal(np.zeros(self.n_components), 1e-4 * np.eye(self.n_components), size=X.shape[0])
         previous_Y = np.zeros(Y.shape) # will be used to store value of Y(t-1)
 
-        if verbose:
+        if verbose >= 1:
             print("Starting gradient descent loop...")
 
         if self.learning_rate is None:
             self.learning_rate = max(X.shape[0] / self.early_exaggeration / 4, 50)
 
-        range_ = tqdm(range(self.n_iter)) if verbose else range(self.n_iter)
+        range_ = tqdm(range(self.n_iter)) if verbose >=1 else range(self.n_iter)
         for t in range_:
+
             q_distances = pairwise_distances(Y, metric=self.metric, squared=True)
             # compute low-dimensional affinities q_{ij}
             t_student_q_distances = (1.0 + q_distances) ** (-1)
@@ -53,9 +56,9 @@ class TSNE():
 
             # gradient descent
             if t < self.iterations_with_early_exaggeration:
-                gradient = self.compute_gradient(Y, self.early_exaggeration*P, Q, t_student_q_distances)
+                gradient = _compute_gradient(Y, self.early_exaggeration*P, Q, t_student_q_distances, self.n_components)
             else:
-                gradient = self.compute_gradient(Y, P, Q, t_student_q_distances)
+                gradient = _compute_gradient(Y, P, Q, t_student_q_distances, self.n_components)
                 
             momentum = 0.5 if t < 250 else 0.8
             Y_t_plus_1 = Y - self.learning_rate * gradient + momentum * (Y - previous_Y)
