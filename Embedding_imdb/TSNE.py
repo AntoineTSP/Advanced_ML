@@ -1,12 +1,16 @@
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 from tqdm import tqdm
+from numba import njit, float64
 
 # local imports
 from joint_probabilities import compute_joint_probabilities
 
+def _compute_squared_distances(X, metric):
+    return pairwise_distances(X, metric=metric, squared=True)
+
 class TSNE():
-    def __init__(self, n_components, perplexity, early_exaggeration=4, iterations_with_early_exaggeration=50, learning_rate=None, metric="euclidean", n_iter=1000):
+    def __init__(self, n_components, perplexity, early_exaggeration=4, iterations_with_early_exaggeration=50, learning_rate=None, metric="euclidean", n_iter=1000, n_steps_probas=100):
         self.n_components = n_components
         self.perplexity = perplexity
         self.early_exaggeration = early_exaggeration
@@ -14,17 +18,19 @@ class TSNE():
         self.learning_rate = learning_rate
         self.metric = metric
         self.n_iter = max(250, n_iter)
+        self.n_steps_probas = n_steps_probas
 
     def compute_gradient(self, Y, P, Q, t_student_q_distances):
         gradient = np.zeros((P.shape[0], self.n_components))
         for i in range(P.shape[1]):
             gradient[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
-            
+
         return gradient
 
     def fit_transform(self, X, verbose=True):
-        squared_distances = pairwise_distances(X, metric=self.metric, squared=True)
-        P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=100, ENTROPY_TOLERANCE=1e-5, display_tqdm=verbose)
+        #squared_distances = pairwise_distances(X, metric=self.metric, squared=True)
+        squared_distances = _compute_squared_distances(X, self.metric)
+        P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=self.n_steps_probas, ENTROPY_TOLERANCE=1e-5, display_tqdm=verbose)
 
         # initial solution samples from a multivariate centered normal
         Y = np.random.multivariate_normal(np.zeros(self.n_components), 1e-4 * np.eye(self.n_components), size=X.shape[0])
@@ -41,7 +47,9 @@ class TSNE():
             q_distances = pairwise_distances(Y, metric=self.metric, squared=True)
             # compute low-dimensional affinities q_{ij}
             t_student_q_distances = (1.0 + q_distances) ** (-1)
-            Q = t_student_q_distances / np.sum(t_student_q_distances, axis=1, keepdims=True)
+            #Q = t_student_q_distances / np.sum(t_student_q_distances, axis=1, keepdims=True)
+            Q = t_student_q_distances / (np.sum(t_student_q_distances) - t_student_q_distances.shape[0]) # we remove the shape because the sum we divide by should not take into account 
+                                                                                                         # elements on the diagonal of t_student_q_distances, all equal to 1
 
             # gradient descent
             if t < self.iterations_with_early_exaggeration:
@@ -50,7 +58,7 @@ class TSNE():
                 gradient = self.compute_gradient(Y, P, Q, t_student_q_distances)
                 
             momentum = 0.5 if t < 250 else 0.8
-            Y_t_plus_1 = Y + self.learning_rate * gradient + momentum * (Y - previous_Y)
+            Y_t_plus_1 = Y - self.learning_rate * gradient + momentum * (Y - previous_Y)
 
             # update Ys
             previous_Y = Y
