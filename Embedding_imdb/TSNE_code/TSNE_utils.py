@@ -56,7 +56,7 @@ class TSNE():
         if self.learning_rate is None:
             self.learning_rate = max(X.shape[0] / self.early_exaggeration / 4, 50)
 
-        optimizer = DeltaBarDeltaOptimizer(learning_rate=self.learning_rate, momentum=self.momentum_rule)
+        optimizer = DeltaBarDeltaOptimizer(learning_rate=self.learning_rate, momentum=lambda t: 0.9)
 
         range_ = tqdm(range(self.n_iter)) if verbose >= 1 else range(self.n_iter)
         for t in range_:
@@ -81,8 +81,8 @@ class TSNE():
                         print(f"Algorithm has converged at step {t}")
                     return Y
 
-            #momentum = self.momentum_rule(t)
-            Y_t_plus_1 = Y - learning_rate * gradient# + momentum * (Y - previous_Y)
+            momentum = self.momentum_rule(t)
+            Y_t_plus_1 = Y - learning_rate * gradient + momentum * (Y - previous_Y)
 
             # update Ys
             previous_Y = Y
