@@ -5,6 +5,7 @@ from numba import njit, float64
 
 # local imports
 from TSNE_code.joint_probabilities import compute_joint_probabilities
+from TSNE_code.deltaBarDelta import DeltaBarDeltaOptimizer
 
 def _compute_squared_distances(X, metric):
     return pairwise_distances(X, metric=metric, squared=True)
@@ -55,6 +56,8 @@ class TSNE():
         if self.learning_rate is None:
             self.learning_rate = max(X.shape[0] / self.early_exaggeration / 4, 50)
 
+        optimizer = DeltaBarDeltaOptimizer(learning_rate=self.learning_rate, momentum=self.momentum_rule)
+
         range_ = tqdm(range(self.n_iter)) if verbose >= 1 else range(self.n_iter)
         for t in range_:
 
@@ -70,15 +73,16 @@ class TSNE():
                 gradient = _compute_gradient(Y, self.early_exaggeration*P, Q, t_student_q_distances, self.n_components)
             else:
                 gradient = _compute_gradient(Y, P, Q, t_student_q_distances, self.n_components)
+            learning_rate = optimizer.update(gradient, t)
 
             if t % self.interval_convergence_check == 0:
                 if _check_convergence(gradient, self.min_grad_norm):
                     if verbose >= 1:
                         print(f"Algorithm has converged at step {t}")
                     return Y
-                
-            momentum = self.momentum_rule(t)
-            Y_t_plus_1 = Y - self.learning_rate * gradient + momentum * (Y - previous_Y)
+
+            #momentum = self.momentum_rule(t)
+            Y_t_plus_1 = Y - learning_rate * gradient# + momentum * (Y - previous_Y)
 
             # update Ys
             previous_Y = Y
