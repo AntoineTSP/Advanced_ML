@@ -1,3 +1,4 @@
+
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 from tqdm import tqdm
@@ -11,19 +12,28 @@ from TSNE_code.deltaBarDelta import DeltaBarDeltaOptimizer
 def _compute_squared_distances(X, metric):
     return pairwise_distances(X, metric=metric, squared=True)
 
-@njit
-def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
-    gradient_f = np.zeros((P.shape[0], n_components))
-    for i in range(P.shape[1]):
-        gradient_f[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
+# @njit
+# def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
+#     gradient_f = np.zeros((P.shape[0], n_components))
+#     for i in range(P.shape[1]):
+#         gradient_f[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
 
-    return gradient_f
+#     return gradient_f
+
+@njit(parallel=True)
+def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
+    grad = np.zeros((P.shape[0], n_components))
+    for i in prange(P.shape[0]):
+        sum_ = np.zeros(n_components)
+        for j in range(P.shape[1]):
+            sum_ += (P[i, j] - Q[i, j]) * (Y[i] - Y[j]) * t_student_q_distances[i, j]
+        grad[i] = 4 * sum_
+    return grad
 
 @njit
 def _compute_t_student_distances(q_distances):
     # compute low-dimensional affinities q_{ij}
     t_student_q_distances = (1.0 + q_distances) ** (-1)
-    #Q = t_student_q_distances / np.sum(t_student_q_distances, axis=1, keepdims=True)
     Q = t_student_q_distances / (np.sum(t_student_q_distances) - t_student_q_distances.shape[0]) # we remove the shape because the sum we divide by should not take into account 
                                                                                                          # elements on the diagonal of t_student_q_distances, all equal to 1
     return Q, t_student_q_distances
