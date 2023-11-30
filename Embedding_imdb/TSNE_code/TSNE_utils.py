@@ -1,7 +1,8 @@
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 from tqdm import tqdm
-from numba import njit, float64
+from numba import njit, float64, prange
+import time
 
 # local imports
 from TSNE_code.joint_probabilities import compute_joint_probabilities
@@ -12,11 +13,20 @@ def _compute_squared_distances(X, metric):
 
 @njit
 def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
-    gradient = np.zeros((P.shape[0], n_components))
+    gradient_f = np.zeros((P.shape[0], n_components))
     for i in range(P.shape[1]):
-        gradient[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
+        gradient_f[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
 
-    return gradient
+    return gradient_f
+
+@njit
+def _compute_t_student_distances(q_distances):
+    # compute low-dimensional affinities q_{ij}
+    t_student_q_distances = (1.0 + q_distances) ** (-1)
+    #Q = t_student_q_distances / np.sum(t_student_q_distances, axis=1, keepdims=True)
+    Q = t_student_q_distances / (np.sum(t_student_q_distances) - t_student_q_distances.shape[0]) # we remove the shape because the sum we divide by should not take into account 
+                                                                                                         # elements on the diagonal of t_student_q_distances, all equal to 1
+    return Q, t_student_q_distances
 
 def _check_convergence(gradient, min_grad_norm):
     grad_norm = np.linalg.norm(gradient)
@@ -43,7 +53,6 @@ class TSNE():
         self.adaptive_learning_rate = adaptive_learning_rate
 
     def fit_transform(self, X, verbose=0):
-        #squared_distances = pairwise_distances(X, metric=self.metric, squared=True)
         squared_distances = _compute_squared_distances(X, self.metric)
         P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=self.n_steps_probas, ENTROPY_TOLERANCE=1e-5, display_tqdm=(verbose>=2))
 
@@ -62,12 +71,8 @@ class TSNE():
         range_ = tqdm(range(self.n_iter)) if verbose >= 1 else range(self.n_iter)
         for t in range_:
 
-            q_distances = pairwise_distances(Y, metric=self.metric, squared=True)
-            # compute low-dimensional affinities q_{ij}
-            t_student_q_distances = (1.0 + q_distances) ** (-1)
-            #Q = t_student_q_distances / np.sum(t_student_q_distances, axis=1, keepdims=True)
-            Q = t_student_q_distances / (np.sum(t_student_q_distances) - t_student_q_distances.shape[0]) # we remove the shape because the sum we divide by should not take into account 
-                                                                                                         # elements on the diagonal of t_student_q_distances, all equal to 1
+            q_distances = pairwise_distances(Y, metric=self.metric, squared=True, n_jobs=-1)
+            Q, t_student_q_distances = _compute_t_student_distances(q_distances)
 
             # gradient descent
             if t < self.iterations_with_early_exaggeration:
