@@ -1,21 +1,25 @@
-
 import numpy as np
 from sklearn.metrics.pairwise import pairwise_distances
 from tqdm import tqdm
 from numba import njit, float64, prange
 import time
+from IPython import display
+import matplotlib.pyplot as plt
 
 # local imports
 from TSNE_code.joint_probabilities import compute_joint_probabilities
 from TSNE_code.deltaBarDelta import DeltaBarDeltaOptimizer
 
 
+EPSILON = np.finfo(float).eps
+
+
 def _compute_squared_distances(X, metric):
-    return pairwise_distances(X, metric=metric, squared=True)
+    return pairwise_distances(X, metric=metric, squared=True, n_jobs=-1)
 
 @njit
 def _compute_kl_divergence(P, Q):
-    return np.sum(P * np.log(P / Q))
+    return np.sum(P * np.log(np.maximum(P, EPSILON) / Q))
 
 @njit(parallel=True)
 def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
@@ -59,14 +63,45 @@ class TSNE():
         self.momentum_rule = momentum_rule
         self.adaptive_learning_rate = adaptive_learning_rate
         self.patience = patience
+        
+        self.kl_divergence = []
+        self.Y = None
+        
+    def gradient_descent(self, t, Y, P, Q, t_student_q_distances):
+        if t < self.iterations_with_early_exaggeration:
+            gradient = _compute_gradient(Y, self.early_exaggeration*P, Q, t_student_q_distances, self.n_components)
+        else:
+            gradient = _compute_gradient(Y, P, Q, t_student_q_distances, self.n_components)
 
-    def fit_transform(self, X, verbose=0):
+        convergence = False
+        if t % self.interval_convergence_check == 0:
+            convvergence = _check_convergence(gradient, self.min_grad_norm)
+            
+        return gradient, convergence
+    
+    def dynamically_plot_kl_divergence(self, lower_bound=None, lower_bound_label='', figsize=(7, 4)):
+        plt.figure(figsize=figsize)
+        plt.cla()
+        label = 'Custom' if not self.adaptive_learning_rate else 'Custom + adaptive lr'
+        plt.plot(self.kl_divergence, label=label, c='black')
+        if lower_bound is not None:
+            plt.plot([0, len(self.kl_divergence)], [lower_bound, lower_bound], label=lower_bound_label)
+        plt.grid('on')
+        plt.legend()
+        plt.title("KL divergence through gradient descent")
+        display.display(plt.gcf())
+        display.clear_output(wait=True)
+        plt.close()
+        
+
+    def fit_transform(self, X, reference_kl_divergence=None, title=None, verbose=0):
         squared_distances = _compute_squared_distances(X, self.metric)
         P = compute_joint_probabilities(squared_distances, self.perplexity, n_steps=self.n_steps_probas, ENTROPY_TOLERANCE=1e-5, display_tqdm=(verbose>=2))
 
         # initial solution samples from a multivariate centered normal
-        Y = np.random.multivariate_normal(np.zeros(self.n_components), 1e-4 * np.eye(self.n_components), size=X.shape[0])
-        previous_Y = np.zeros(Y.shape) # will be used to store value of Y(t-1)
+        if self.Y is None:
+            self.Y = np.random.multivariate_normal(np.zeros(self.n_components), 1e-4 * np.eye(self.n_components), size=X.shape[0])
+        previous_Y = np.zeros(self.Y.shape) # will be used to store value of Y(t-1)
 
         if verbose >= 1:
             print("Starting gradient descent loop...")
@@ -74,49 +109,49 @@ class TSNE():
         if self.learning_rate is None:
             self.learning_rate = max(X.shape[0] / self.early_exaggeration / 4, 50)
 
-        optimizer = DeltaBarDeltaOptimizer(learning_rate=self.learning_rate, momentum=lambda t: 0.9)
+        optimizer = DeltaBarDeltaOptimizer(learning_rate=np.zeros_like(self.Y) + self.learning_rate)
         
         if self.patience is not None:
             best_error = np.finfo(float).max
             step_best_error = 0
 
-        range_ = tqdm(range(self.n_iter)) if verbose >= 1 else range(self.n_iter)
+        range_ = tqdm(range(self.n_iter)) if verbose in [1, 2] else range(self.n_iter)
         for t in range_:
 
-            q_distances = pairwise_distances(Y, metric=self.metric, squared=True, n_jobs=-1)
+            q_distances = pairwise_distances(self.Y, metric=self.metric, squared=True, n_jobs=-1)
             Q, t_student_q_distances = _compute_t_student_distances(q_distances)
-
+            
             # gradient descent
-            if t < self.iterations_with_early_exaggeration:
-                gradient = _compute_gradient(Y, self.early_exaggeration*P, Q, t_student_q_distances, self.n_components)
-            else:
-                gradient = _compute_gradient(Y, P, Q, t_student_q_distances, self.n_components)
-            learning_rate = optimizer.update(gradient, t) if self.adaptive_learning_rate else self.learning_rate
-
-            if t % self.interval_convergence_check == 0:
-                if _check_convergence(gradient, self.min_grad_norm):
-                    if verbose >= 1:
-                        print(f"Algorithm has converged at step {t}")
-                    return Y
+            gradient, convergence_check = self.gradient_descent(t, self.Y, P, Q, t_student_q_distances)
+            if convergence_check:
+                if verbose >= 1:
+                    print(f"Algorithm has converged at step {t}")
+                return self.Y
                 
             if self.patience is not None:
                 kl_divergence = _compute_kl_divergence(P, Q)
+                self.kl_divergence.append(kl_divergence)
+                
                 if kl_divergence <= best_error:
                     best_error = kl_divergence
                     step_best_error = t
+                    if verbose >= 3 and (t % self.interval_convergence_check == 0 or t == self.n_iter-1):
+                        title = title if title is not None else 'reference KL divergence'
+                        self.dynamically_plot_kl_divergence(lower_bound=reference_kl_divergence, lower_bound_label=title)
                 elif t - step_best_error > self.patience:
                     if verbose >= 1:
                         print(f"Algorithm has stopped at step {t}")
-                    return Y
+                    return self.Y
 
+            learning_rate = optimizer.update(gradient) if self.adaptive_learning_rate else self.learning_rate
             momentum = self.momentum_rule(t)
-            Y_t_plus_1 = Y - learning_rate * gradient + momentum * (Y - previous_Y)
+            Y_t_plus_1 = self.Y - learning_rate * gradient + momentum * (self.Y - previous_Y)
 
             # update Ys
-            previous_Y = Y
-            Y = Y_t_plus_1
+            previous_Y = self.Y
+            self.Y = Y_t_plus_1
 
-        return Y
+        return self.Y
 
             
         

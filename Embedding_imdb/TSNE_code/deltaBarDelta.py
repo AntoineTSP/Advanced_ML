@@ -1,21 +1,34 @@
 import numpy as np
-
+   
 class DeltaBarDeltaOptimizer:
-    def __init__(self, learning_rate, momentum):
+    def __init__(self, learning_rate, momentum=0.7, decay_factor=0.1, increase_factor=5, epsilon=1e-4):
         self.learning_rate = learning_rate
         self.momentum = momentum
+        self.decay_factor = decay_factor
+        self.increase_factor = increase_factor
+        self.epsilon = epsilon
+        self.prev_delta_bar = None
 
-        self.previous_gradient = np.zeros_like(self.learning_rate)
-        self.momentum_buffer = np.zeros_like(self.learning_rate)
+    def update(self, gradient):
+        if self.prev_delta_bar is None:
+            self.prev_delta_bar = np.zeros_like(gradient)
 
-    def update(self, gradient, t):
-        delta = gradient - self.previous_gradient
+        sign = np.sign(gradient * self.prev_delta_bar)
 
-        self.momentum_buffer = self.momentum(t) * self.momentum_buffer + delta
+        # Learning rate update
+        positive_sign_indices = np.where(sign > 0)
+        negative_sign_indices = np.where(sign < 0)
 
-        new_learning_rate = self.learning_rate * (1 + np.linalg.norm(self.momentum_buffer))
-        self.learning_rate = max(new_learning_rate, 1e-6)  # Prevent learning rate from becoming too small
+        # Increase learning rate for positive signs
+        self.learning_rate[positive_sign_indices] += self.increase_factor
 
-        self.previous_gradient = gradient
+        # Decrease learning rate for negative signs
+        self.learning_rate[negative_sign_indices] -= self.decay_factor * self.learning_rate[negative_sign_indices]
+
+        # Ensure learning rate doesn't become too small
+        self.learning_rate = np.maximum(self.learning_rate, self.epsilon)
+
+        # compute delta_bar(t)
+        self.prev_delta_bar = (1 - self.momentum) * gradient + self.momentum * self.prev_delta_bar
 
         return self.learning_rate
