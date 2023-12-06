@@ -9,16 +9,13 @@ import time
 from TSNE_code.joint_probabilities import compute_joint_probabilities
 from TSNE_code.deltaBarDelta import DeltaBarDeltaOptimizer
 
+
 def _compute_squared_distances(X, metric):
     return pairwise_distances(X, metric=metric, squared=True)
 
-# @njit
-# def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
-#     gradient_f = np.zeros((P.shape[0], n_components))
-#     for i in range(P.shape[1]):
-#         gradient_f[i] = 4 * np.sum(((P[i, :] - Q[i, :]) * t_student_q_distances[i, :])[:, np.newaxis] * (Y[i] - Y), axis=0)
-
-#     return gradient_f
+@njit
+def _compute_kl_divergence(P, Q):
+    return np.sum(P * np.log(P / Q))
 
 @njit(parallel=True)
 def _compute_gradient(Y, P, Q, t_student_q_distances, n_components):
@@ -48,7 +45,7 @@ def _momentum(t):
 
 class TSNE():
     def __init__(self, n_components, perplexity, early_exaggeration=4, iterations_with_early_exaggeration=50, learning_rate=None, metric="euclidean", 
-                 n_iter=1000, n_steps_probas=100, min_grad_norm=1e-5, interval_convergence_check=50, momentum_rule=_momentum, adaptive_learning_rate=True):
+                 n_iter=1000, n_steps_probas=100, min_grad_norm=1e-5, interval_convergence_check=50, momentum_rule=_momentum, adaptive_learning_rate=True, patience=None):
         self.n_components = n_components
         self.perplexity = perplexity
         self.early_exaggeration = early_exaggeration
@@ -61,6 +58,7 @@ class TSNE():
         self.interval_convergence_check = interval_convergence_check
         self.momentum_rule = momentum_rule
         self.adaptive_learning_rate = adaptive_learning_rate
+        self.patience = patience
 
     def fit_transform(self, X, verbose=0):
         squared_distances = _compute_squared_distances(X, self.metric)
@@ -77,6 +75,10 @@ class TSNE():
             self.learning_rate = max(X.shape[0] / self.early_exaggeration / 4, 50)
 
         optimizer = DeltaBarDeltaOptimizer(learning_rate=self.learning_rate, momentum=lambda t: 0.9)
+        
+        if self.patience is not None:
+            best_error = np.finfo(float).max
+            step_best_error = 0
 
         range_ = tqdm(range(self.n_iter)) if verbose >= 1 else range(self.n_iter)
         for t in range_:
@@ -95,6 +97,16 @@ class TSNE():
                 if _check_convergence(gradient, self.min_grad_norm):
                     if verbose >= 1:
                         print(f"Algorithm has converged at step {t}")
+                    return Y
+                
+            if self.patience is not None:
+                kl_divergence = _compute_kl_divergence(P, Q)
+                if kl_divergence <= best_error:
+                    best_error = kl_divergence
+                    step_best_error = t
+                elif t - step_best_error > self.patience:
+                    if verbose >= 1:
+                        print(f"Algorithm has stopped at step {t}")
                     return Y
 
             momentum = self.momentum_rule(t)
