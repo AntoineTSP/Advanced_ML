@@ -79,17 +79,39 @@ class TSNE():
             
         return gradient, convergence
     
-    def dynamically_plot_kl_divergence(self, lower_bound=None, lower_bound_label='', figsize=(7, 4)):
-        plt.figure(figsize=figsize)
-        plt.cla()
+    # def dynamically_plot_kl_divergence(self, lower_bound=None, lower_bound_label='', figsize=(7, 4)):
+    #     plt.figure(figsize=figsize)
+    #     plt.cla()
+    #     label = 'Custom' if not self.adaptive_learning_rate else 'Custom + adaptive lr'
+    #     plt.plot(self.kl_divergence, label=label, c='black')
+    #     if lower_bound is not None:
+    #         plt.plot([0, len(self.kl_divergence)], [lower_bound, lower_bound], label=lower_bound_label)
+    #     plt.grid('on')
+    #     plt.legend()
+    #     plt.title("KL divergence through gradient descent")
+    #     display.display(plt.gcf())
+    #     display.clear_output(wait=True)
+    #     plt.close()
+    
+    def dynamically_plot_kl_divergence(self, t, bar_length=50, lower_bound=None, lower_bound_label='', figsize=(7, 6)):
+        fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [3, 1]})
+        
+        # Plot KL divergence on the upper subplot
         label = 'Custom' if not self.adaptive_learning_rate else 'Custom + adaptive lr'
-        plt.plot(self.kl_divergence, label=label, c='black')
+        ax[0].plot(self.kl_divergence, label=label, c='black')      
         if lower_bound is not None:
-            plt.plot([0, len(self.kl_divergence)], [lower_bound, lower_bound], label=lower_bound_label)
-        plt.grid('on')
-        plt.legend()
-        plt.title("KL divergence through gradient descent")
-        display.display(plt.gcf())
+            ax[0].plot([0, len(self.kl_divergence)], [lower_bound, lower_bound], label=lower_bound_label)
+        ax[0].grid('on')
+        ax[0].legend()
+        ax[0].set_title("KL divergence through gradient descent")
+
+        # Progress bar in the lower subplot
+        ax[1].axis('off')
+        progress_value = t / self.n_iter
+        bar = "[" + "#" * int(bar_length * progress_value) + "-" * (bar_length - int(bar_length * progress_value)) + "]"
+        ax[1].text(0.5, 0.5, f"Progress: {round(100*progress_value, 2)}% {bar}", ha='center', va='center', fontsize=12)
+
+        display.display(fig)
         display.clear_output(wait=True)
         plt.close()
         
@@ -135,9 +157,10 @@ class TSNE():
                 if kl_divergence <= best_error:
                     best_error = kl_divergence
                     step_best_error = t
-                    if verbose >= 3 and (t % self.interval_convergence_check == 0 or t == self.n_iter-1):
+                    if verbose >= 3 and (t % 20 == 0 or t == self.n_iter-1):
                         title = title if title is not None else 'reference KL divergence'
-                        self.dynamically_plot_kl_divergence(lower_bound=reference_kl_divergence, lower_bound_label=title)
+                        self.dynamically_plot_kl_divergence(t, bar_length=50, lower_bound=reference_kl_divergence, lower_bound_label=title)
+                        
                 elif t - step_best_error > self.patience:
                     if verbose >= 1:
                         print(f"Algorithm has stopped at step {t}")
