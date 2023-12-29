@@ -123,7 +123,7 @@ class TSNE():
         # initial solution samples from a multivariate centered normal
         if self.Y is None:
             self.Y = np.random.multivariate_normal(np.zeros(self.n_components), 1e-4 * np.eye(self.n_components), size=X.shape[0])
-        previous_Y = np.zeros(self.Y.shape) # will be used to store value of Y(t-1)
+        previous_Y = self.Y # will be used to store value of Y(t-1)
 
         if verbose >= 1:
             print("Starting gradient descent loop...")
