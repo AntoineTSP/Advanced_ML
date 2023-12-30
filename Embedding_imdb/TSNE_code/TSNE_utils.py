@@ -78,20 +78,7 @@ class TSNE():
             convvergence = _check_convergence(gradient, self.min_grad_norm)
             
         return gradient, convergence
-    
-    # def dynamically_plot_kl_divergence(self, lower_bound=None, lower_bound_label='', figsize=(7, 4)):
-    #     plt.figure(figsize=figsize)
-    #     plt.cla()
-    #     label = 'Custom' if not self.adaptive_learning_rate else 'Custom + adaptive lr'
-    #     plt.plot(self.kl_divergence, label=label, c='black')
-    #     if lower_bound is not None:
-    #         plt.plot([0, len(self.kl_divergence)], [lower_bound, lower_bound], label=lower_bound_label)
-    #     plt.grid('on')
-    #     plt.legend()
-    #     plt.title("KL divergence through gradient descent")
-    #     display.display(plt.gcf())
-    #     display.clear_output(wait=True)
-    #     plt.close()
+
     
     def dynamically_plot_kl_divergence(self, t, bar_length=50, lower_bound=None, lower_bound_label='', figsize=(7, 6)):
         fig, ax = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [3, 1]})
@@ -154,7 +141,7 @@ class TSNE():
                 kl_divergence = _compute_kl_divergence(P, Q)
                 self.kl_divergence.append(kl_divergence)
                 
-                if kl_divergence <= best_error:
+                if kl_divergence <= best_error or t < self.iterations_with_early_exaggeration:
                     best_error = kl_divergence
                     step_best_error = t
                     if verbose >= 3 and (t % 20 == 0 or t == self.n_iter-1):
