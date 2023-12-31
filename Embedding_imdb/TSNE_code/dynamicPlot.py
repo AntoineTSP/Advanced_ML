@@ -7,8 +7,7 @@ class KLDynamicPlot:
 
     Methods
     -------
-    dynamically_plot_kl_divergence(kl_divergence, adaptive_learning_rate, 
-                                   lower_bound=None, lower_bound_label='', figsize=(7, 4))
+    dynamically_plot_kl_divergence(kl_divergence, adaptive_learning_rate, lower_bound=None, lower_bound_label='', figsize=(7, 4))
         Dynamically plot KL divergence.
 
     update_image_and_progress_bar(i, total_steps, figsize=(7, 4))
