@@ -17,4 +17,4 @@ custom_embedding = custom_tsne.fit_transform(X, verbose=3)
 # Documentation
 The t-SNE functions are all explained through docstrings. We also leveraged theSphinx library to create a Numpy-like HTML documentation, making it more easily readable. <br>
 
-To view this documentation, navigate to the `build/html/index.html` file or click [here](docs/build/html/index.html).
+To view this documentation, navigate to the `build/html/index.html` file or click [here](build/html/index.html).
