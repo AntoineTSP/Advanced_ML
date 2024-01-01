@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>TSNE_code package &#8212; t-SNE  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TSNE_code';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Embedding_imdb" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">t-SNE  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        Embedding_imdb
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="modules.html">
+                        Embedding_imdb
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">TSNE_code package</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">Embedding_imdb</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">TSNE_code package</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="tsne-code-package">
+<h1>TSNE_code package<a class="headerlink" href="#tsne-code-package" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-TSNE_code.TSNE_utils">
+<span id="tsne-code-tsne-utils-module"></span><h2>TSNE_code.TSNE_utils module<a class="headerlink" href="#module-TSNE_code.TSNE_utils" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TSNE_code.TSNE_utils.</span></span><span class="sig-name descname"><span class="pre">TSNE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_exaggeration=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations_with_early_exaggeration=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric='euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter=1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps_probas=100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_grad_norm=1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_convergence_check=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum_rule=&lt;function</span> <span class="pre">_momentum&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_learning_rate=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create an instance of the class TSNE</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>n_components<span class="classifier">int </span></dt><dd><p>Dimension of the low-dimensional space to project data onto</p>
+</dd>
+<dt>perplexity<span class="classifier">float</span></dt><dd><p>The perplexity parameter balances the trade-off between preserving local
+and global structure in the data. It is a smoothing parameter that
+influences the effective number of nearest neighbors each point has during
+the algorithm’s optimization process. A higher perplexity value may
+capture more global structure, but it can also lead to more focus on
+global patterns at the expense of local details. Conversely, a lower
+perplexity may result in more emphasis on local details but might miss
+overarching patterns. Typical values range from 5 to 50, and the choice
+depends on the characteristics of the data.</p>
+</dd>
+<dt>early_exaggeration<span class="classifier">int, optional</span></dt><dd><p>Controls the initial spacing between clusters in the t-SNE visualization, by default 4</p>
+</dd>
+<dt>iterations_with_early_exaggeration<span class="classifier">int, optional</span></dt><dd><p>Number of iterations where ealy exaggeration is applied, by default 50</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>Initial value of the learning rate used for the gradient descent, by default None</p>
+</dd>
+<dt>metric<span class="classifier">str, optional</span></dt><dd><p>Metric to use to compute distances, by default “euclidean”</p>
+</dd>
+<dt>n_iter<span class="classifier">int, optional</span></dt><dd><p>Number of iterations for the gradient descent, by default 1000</p>
+</dd>
+<dt>n_steps_probas<span class="classifier">int, optional</span></dt><dd><p>Number of steps allowed for the binary search to find the value of the variance of the Gaussian
+to compute the matrix of joint probabilities on the high-dimensional space P, by default 100</p>
+</dd>
+<dt>min_grad_norm<span class="classifier">_type_, optional</span></dt><dd><p>If the norm of the gradient falls below this value, the gradient descent is stopped early, by default 1e-5</p>
+</dd>
+<dt>interval_convergence_check<span class="classifier">int, optional</span></dt><dd><p>Convergence will be checked every ‘interval_convergence_check’ iterations. A smaller number guarantees that potential
+convegence will be caught more quickly, but demands more computation time, by default 50</p>
+</dd>
+<dt>momentum_rule<span class="classifier">method, optional</span></dt><dd><p>The rule to apply for the momentum, must be a method taking t, the current gradient descent step, as single parameter. 
+If momentum is constant, define a function which returns said constant, by default -&gt; 0.5 if t &lt; 250 else 0.8</p>
+</dd>
+<dt>adaptive_learning_rate<span class="classifier">bool, optional</span></dt><dd><p>If True, the delta-bar-delta method is applied to adaptively adjust the learning rate during the gradient descent optimization process. 
+This adaptive learning rate can help improve convergence and performance, especially in cases where the scale of gradients varies 
+across dimensions, by default True</p>
+</dd>
+<dt>patience<span class="classifier">int, optional</span></dt><dd><p>Determines the number of consecutive epochs with no improvement of the KL divergence before the training process is stopped. 
+If None, the gradient descent will run for n_iter steps, whether there are improvements or not, by default None</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>fit_transform(X, reference_kl_divergence=None, title=None, verbose=0)</dt><dd><p>Fit X into a low-dimensional space.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">TSNE_code.TSNE_utils</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Replace with your actual data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reference_kl_divergence</span> <span class="o">=</span> <span class="mf">42.0</span>  <span class="c1"># Replace with your reference value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adaptive_learning_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">low_dim_representation</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">reference_kl_divergence</span><span class="o">=</span><span class="n">reference_kl_divergence</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Reference&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot the low-dimensional representation or perform further analysis</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence">
+<span class="sig-name descname"><span class="pre">dynamically_plot_kl_divergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.dynamically_plot_kl_divergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence" title="Link to this definition">#</a></dt>
+<dd><p>Plot the evolution of the KL divergence up to step t.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>t<span class="classifier">int</span></dt><dd><p>Current step of the gradient descent</p>
+</dd>
+<dt>bar_length<span class="classifier">int, optional</span></dt><dd><p>Length of the progress bar to display underneath the figure, by default 50</p>
+</dd>
+<dt>lower_bound<span class="classifier">float, optional</span></dt><dd><p>Lower bound to display on the figure.
+Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</p>
+</dd>
+<dt>lower_bound_label<span class="classifier">str, optional</span></dt><dd><p>Label to give as a legend to the lower bound if one is provided, by default ‘’</p>
+</dd>
+<dt>figsize<span class="classifier">tuple, optional</span></dt><dd><p>Size of the figure to display, by default (7, 6)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_kl_divergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit X into a low-dimensional space.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<dl>
+<dt>X<span class="classifier">numpy.ndarray, shape (n_samples, n_features)</span></dt><dd><p>Original data on the high-dimensional space</p>
+</dd>
+<dt>reference_kl_divergence<span class="classifier">float, optional</span></dt><dd><p>Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</p>
+</dd>
+<dt>title<span class="classifier">_type_, optional</span></dt><dd><p>Label to give as a legend to reference_kl_divergence, if one is provided, on the dynamic plots, by default None</p>
+</dd>
+<dt>verbose<span class="classifier">int, optional</span></dt><dd><dl class="simple">
+<dt>Verbosity level: 0 -&gt; no verbosity</dt><dd><p>1 -&gt; progress bar for the gradient descent
+2 -&gt; verbosity 1 + progress bars for the binary search for the computation of conditional probabilities
+3 -&gt; verbosity 2 + dynamic plot of the evolution of the KL divergence during gradient descent</p>
+</dd>
+</dl>
+<p>, by default 0</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>numpy.ndarray, shape (n_samples, n_components)</dt><dd><p>Projected data onto the low-dimensional space</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.gradient_descent">
+<span class="sig-name descname"><span class="pre">gradient_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_student_q_distances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.gradient_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.gradient_descent" title="Link to this definition">#</a></dt>
+<dd><p>Run one iteration of the gradient descent.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>t<span class="classifier">int</span></dt><dd><p>Current step of the gradient descent</p>
+</dd>
+<dt>Y<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Projection of original data on low-dimensional space</p>
+</dd>
+<dt>P<span class="classifier">numpy.ndarray, shape (n_samples, n_features)</span></dt><dd><p>High-dimensional space joint probabilities</p>
+</dd>
+<dt>Q<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Low-dimensional space joint probabilities</p>
+</dd>
+<dt>t_student_q_distances<span class="classifier">numpy.ndarray, shape (n_samples, n_samples)</span></dt><dd><p>Array containing (1 / ||y_i - y_j||²), (y_i) elements of Y</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>gradient<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Gradient computed at step t</p>
+</dd>
+<dt>convergence<span class="classifier">bool</span></dt><dd><p>Whether the algorithm has converged yet</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-TSNE_code.deltaBarDelta">
+<span id="tsne-code-deltabardelta-module"></span><h2>TSNE_code.deltaBarDelta module<a class="headerlink" href="#module-TSNE_code.deltaBarDelta" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TSNE_code.deltaBarDelta.</span></span><span class="sig-name descname"><span class="pre">DeltaBarDeltaOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increase_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/deltaBarDelta.html#DeltaBarDeltaOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create an optimizer that follows the delta-bar-delta method.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>learning_rate<span class="classifier">float</span></dt><dd><p>Current value of the learning rate.</p>
+</dd>
+<dt>momentum<span class="classifier">float, optional</span></dt><dd><p>Momentum determines how much influence the weighted average of previous
+gradients has on the current value of the learning rate, by default 0.7.</p>
+</dd>
+<dt>decay_factor<span class="classifier">float, optional</span></dt><dd><p>Multiplicative constant to apply to learning rates that need to be slowed
+down, by default 0.1.</p>
+</dd>
+<dt>increase_factor<span class="classifier">int, optional</span></dt><dd><p>Increment to apply to learning rates that need to be accelerated, by
+default 5.</p>
+</dd>
+<dt>epsilon<span class="classifier">float, optional</span></dt><dd><p>Minimum threshold for the learning rate, by default 1e-4.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>prev_delta_bar<span class="classifier">numpy.ndarray</span></dt><dd><p>Previous value of delta_bar used for momentum calculations.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Methods<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>update(gradient)</dt><dd><p>Update the learning rate based on the provided gradient.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Examples<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">DeltaBarDeltaOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_epochs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">gradient</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_descent</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">)</span>
+<span class="go">        learning_rate = optimizer.update(gradient)</span>
+<span class="go">        Y_t_plus_1 = self.Y - learning_rate * gradient + momentum * (self.Y - previous_Y) </span>
+<span class="go">        # momentum here corresponds to another momentum, associated to the TSNE instance</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gradient</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/deltaBarDelta.html#DeltaBarDeltaOptimizer.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer.update" title="Link to this definition">#</a></dt>
+<dd><p>Update the learning rate based on the provided gradient.</p>
+<section id="id8">
+<h4>Parameters<a class="headerlink" href="#id8" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>gradient<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>The gradient of the KL divergence wrt low-dimensional space datapoints</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h4>Returns<a class="headerlink" href="#id9" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>numpy.ndarray, shape (n_samples, n_components)</dt><dd><p>The updated learning rates for each component</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-TSNE_code.dynamicPlot">
+<span id="tsne-code-dynamicplot-module"></span><h2>TSNE_code.dynamicPlot module<a class="headerlink" href="#module-TSNE_code.dynamicPlot" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="TSNE_code.dynamicPlot.KLDynamicPlot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TSNE_code.dynamicPlot.</span></span><span class="sig-name descname"><span class="pre">KLDynamicPlot</span></span><a class="reference internal" href="_modules/TSNE_code/dynamicPlot.html#KLDynamicPlot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.dynamicPlot.KLDynamicPlot" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for dynamically plotting KL divergence during gradient descent.</p>
+<section id="id10">
+<h3>Methods<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<dl>
+<dt>dynamically_plot_kl_divergence(kl_divergence, adaptive_learning_rate, </dt><dd><blockquote>
+<div><p>lower_bound=None, lower_bound_label=’’, figsize=(7, 4))</p>
+</div></blockquote>
+<p>Dynamically plot KL divergence.</p>
+</dd>
+<dt>update_image_and_progress_bar(i, total_steps, figsize=(7, 4))</dt><dd><p>Update the progress bar and image at each iteration.</p>
+</dd>
+<dt>draw_custom_progress_bar(i, progress_value, bar_length=50)</dt><dd><p>Draw a custom progress bar.</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Attributes<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>kl_divergence<span class="classifier">list</span></dt><dd><p>List to store KL divergence values.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Examples<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">your_module</span> <span class="kn">import</span> <span class="n">KLDynamicPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kl_plotter</span> <span class="o">=</span> <span class="n">KLDynamicPlot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kl_divergence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>  <span class="c1"># Replace with your actual KL divergence values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kl_plotter</span><span class="o">.</span><span class="n">dynamically_plot_kl_divergence</span><span class="p">(</span><span class="n">kl_divergence</span><span class="p">,</span> <span class="n">adaptive_learning_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kl_plotter</span><span class="o">.</span><span class="n">update_image_and_progress_bar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">total_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kl_plotter</span><span class="o">.</span><span class="n">draw_custom_progress_bar</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="n">progress_value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.dynamicPlot.KLDynamicPlot.draw_custom_progress_bar">
+<span class="sig-name descname"><span class="pre">draw_custom_progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/dynamicPlot.html#KLDynamicPlot.draw_custom_progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.dynamicPlot.KLDynamicPlot.draw_custom_progress_bar" title="Link to this definition">#</a></dt>
+<dd><p>Draw a custom progress bar.</p>
+<section id="id13">
+<h4>Parameters<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>i<span class="classifier">int</span></dt><dd><p>Current iteration step.</p>
+</dd>
+<dt>progress_value<span class="classifier">float</span></dt><dd><p>Value indicating the progress (between 0 and 1).</p>
+</dd>
+<dt>bar_length<span class="classifier">int, optional</span></dt><dd><p>Length of the progress bar, by default 50.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.dynamicPlot.KLDynamicPlot.dynamically_plot_kl_divergence">
+<span class="sig-name descname"><span class="pre">dynamically_plot_kl_divergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kl_divergence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">4)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/dynamicPlot.html#KLDynamicPlot.dynamically_plot_kl_divergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.dynamicPlot.KLDynamicPlot.dynamically_plot_kl_divergence" title="Link to this definition">#</a></dt>
+<dd><p>Dynamically plot KL divergence during gradient descent.</p>
+<section id="id14">
+<h4>Parameters<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>kl_divergence<span class="classifier">list or numpy.ndarray</span></dt><dd><p>List of KL divergence values.</p>
+</dd>
+<dt>adaptive_learning_rate<span class="classifier">bool</span></dt><dd><p>Flag indicating whether adaptive learning rate is used.</p>
+</dd>
+<dt>lower_bound<span class="classifier">float, optional</span></dt><dd><p>Lower bound for the plot, by default None</p>
+</dd>
+<dt>lower_bound_label<span class="classifier">str, optional</span></dt><dd><p>Label for the lower bound in the legend if one is provided, by default ‘’</p>
+</dd>
+<dt>figsize<span class="classifier">tuple, optional</span></dt><dd><p>Size of the figure, by default (7, 4).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.dynamicPlot.KLDynamicPlot.update_image_and_progress_bar">
+<span class="sig-name descname"><span class="pre">update_image_and_progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">4)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/dynamicPlot.html#KLDynamicPlot.update_image_and_progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.dynamicPlot.KLDynamicPlot.update_image_and_progress_bar" title="Link to this definition">#</a></dt>
+<dd><p>Update the progress bar and image at each iteration.</p>
+<section id="id15">
+<h4>Parameters<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>i<span class="classifier">int</span></dt><dd><p>Current iteration step.</p>
+</dd>
+<dt>total_steps<span class="classifier">int</span></dt><dd><p>Total number of steps.</p>
+</dd>
+<dt>figsize<span class="classifier">tuple, optional</span></dt><dd><p>Size of the figure, by default (7, 4).</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-TSNE_code.joint_probabilities">
+<span id="tsne-code-joint-probabilities-module"></span><h2>TSNE_code.joint_probabilities module<a class="headerlink" href="#module-TSNE_code.joint_probabilities" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="TSNE_code.joint_probabilities.binary_search_perplexity">
+<span class="sig-prename descclassname"><span class="pre">TSNE_code.joint_probabilities.</span></span><span class="sig-name descname"><span class="pre">binary_search_perplexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sqdistances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ENTROPY_TOLERANCE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_tqdm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/joint_probabilities.html#binary_search_perplexity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.joint_probabilities.binary_search_perplexity" title="Link to this definition">#</a></dt>
+<dd><p>Compute conditional probabilities using binary search for a given perplexity.</p>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>sqdistances<span class="classifier">numpy.ndarray, shape (n_samples, n_neighbors)</span></dt><dd><p>Squared pairwise distances between data points.</p>
+</dd>
+<dt>perplexity<span class="classifier">float</span></dt><dd><p>Perplexity value.</p>
+</dd>
+<dt>n_steps<span class="classifier">int, optional</span></dt><dd><p>Number of steps for the binary search, by default 100.</p>
+</dd>
+<dt>ENTROPY_TOLERANCE<span class="classifier">float, optional</span></dt><dd><p>Tolerance for the difference between actual and desired entropy, by default 1e-5.</p>
+</dd>
+<dt>display_tqdm<span class="classifier">bool, optional</span></dt><dd><p>If True, a progress bar will be displayed to show progress of rows of P computed, by default False.</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h3>Returns<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>numpy.ndarray, shape (n_samples, n_neighbors)</dt><dd><p>Matrix of conditional probabilities.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TSNE_code.joint_probabilities.binary_search_perplexity_i">
+<span class="sig-prename descclassname"><span class="pre">TSNE_code.joint_probabilities.</span></span><span class="sig-name descname"><span class="pre">binary_search_perplexity_i</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sqdistances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_entropy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ENTROPY_TOLERANCE</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/joint_probabilities.html#binary_search_perplexity_i"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.joint_probabilities.binary_search_perplexity_i" title="Link to this definition">#</a></dt>
+<dd><p>Binary search to find conditional probabilities to all other datapoints, for a given datapoint.</p>
+<section id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>i<span class="classifier">int</span></dt><dd><p>Index of the data point.</p>
+</dd>
+<dt>sqdistances<span class="classifier">numpy.ndarray, shape (n_samples, n_neighbors)</span></dt><dd><p>Squared pairwise distances between data points.</p>
+</dd>
+<dt>P<span class="classifier">numpy.ndarray, shape (n_samples, n_neighbors)</span></dt><dd><p>Matrix to store conditional probabilities.</p>
+</dd>
+<dt>desired_entropy<span class="classifier">float</span></dt><dd><p>Desired Shannon entropy.</p>
+</dd>
+<dt>n_samples<span class="classifier">int</span></dt><dd><p>Number of data points.</p>
+</dd>
+<dt>n_neighbors<span class="classifier">int</span></dt><dd><p>Number of neighbors to compute distances with.</p>
+</dd>
+<dt>n_steps<span class="classifier">int</span></dt><dd><p>Number of steps for the binary search.</p>
+</dd>
+<dt>ENTROPY_TOLERANCE<span class="classifier">float</span></dt><dd><p>Tolerance for the difference between actual and desired entropy.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TSNE_code.joint_probabilities.compute_joint_probabilities">
+<span class="sig-prename descclassname"><span class="pre">TSNE_code.joint_probabilities.</span></span><span class="sig-name descname"><span class="pre">compute_joint_probabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sqdistances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ENTROPY_TOLERANCE</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_tqdm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/joint_probabilities.html#compute_joint_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.joint_probabilities.compute_joint_probabilities" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TSNE_code.joint_probabilities.log2_with_mask">
+<span class="sig-prename descclassname"><span class="pre">TSNE_code.joint_probabilities.</span></span><span class="sig-name descname"><span class="pre">log2_with_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/joint_probabilities.html#log2_with_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.joint_probabilities.log2_with_mask" title="Link to this definition">#</a></dt>
+<dd><p>Apply log2 to each non-null elements of a positive array.</p>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>arr<span class="classifier">numpy.ndarray</span></dt><dd><p>Array of positive or null elements</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Returns<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Non-null elements of passed array were applied log2 to, 0s were left untouched</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-TSNE_code">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-TSNE_code" title="Link to this heading">#</a></h2>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Embedding_imdb</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.TSNE_utils">TSNE_code.TSNE_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE"><code class="docutils literal notranslate"><span class="pre">TSNE</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence"><code class="docutils literal notranslate"><span class="pre">TSNE.dynamically_plot_kl_divergence()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.fit_transform"><code class="docutils literal notranslate"><span class="pre">TSNE.fit_transform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.gradient_descent"><code class="docutils literal notranslate"><span class="pre">TSNE.gradient_descent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.deltaBarDelta">TSNE_code.deltaBarDelta module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer"><code class="docutils literal notranslate"><span class="pre">DeltaBarDeltaOptimizer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.deltaBarDelta.DeltaBarDeltaOptimizer.update"><code class="docutils literal notranslate"><span class="pre">DeltaBarDeltaOptimizer.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.dynamicPlot">TSNE_code.dynamicPlot module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.dynamicPlot.KLDynamicPlot"><code class="docutils literal notranslate"><span class="pre">KLDynamicPlot</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.dynamicPlot.KLDynamicPlot.draw_custom_progress_bar"><code class="docutils literal notranslate"><span class="pre">KLDynamicPlot.draw_custom_progress_bar()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.dynamicPlot.KLDynamicPlot.dynamically_plot_kl_divergence"><code class="docutils literal notranslate"><span class="pre">KLDynamicPlot.dynamically_plot_kl_divergence()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.dynamicPlot.KLDynamicPlot.update_image_and_progress_bar"><code class="docutils literal notranslate"><span class="pre">KLDynamicPlot.update_image_and_progress_bar()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.joint_probabilities">TSNE_code.joint_probabilities module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.joint_probabilities.binary_search_perplexity"><code class="docutils literal notranslate"><span class="pre">binary_search_perplexity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.joint_probabilities.binary_search_perplexity_i"><code class="docutils literal notranslate"><span class="pre">binary_search_perplexity_i()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.joint_probabilities.compute_joint_probabilities"><code class="docutils literal notranslate"><span class="pre">compute_joint_probabilities()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.joint_probabilities.log2_with_mask"><code class="docutils literal notranslate"><span class="pre">log2_with_mask()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/TSNE_code.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Amadei, Kirscher, Klein.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>t-SNE utils &#8212; t-SNE  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=362ab14a" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'TSNE_utils';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="t-SNE joint_probabilities" href="TSNE_prob.html" />
+    <link rel="prev" title="t-SNE code" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">t-SNE  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">t-SNE code</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">t-SNE utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TSNE_prob.html">t-SNE joint_probabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TSNE_dbd.html">t-SNE deltaBarDelta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="TSNE_plot.html">t-SNE dynamicPlot</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/TSNE_utils.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>t-SNE utils</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.TSNE_utils">TSNE_code.TSNE_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE"><code class="docutils literal notranslate"><span class="pre">TSNE</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence"><code class="docutils literal notranslate"><span class="pre">TSNE.dynamically_plot_kl_divergence()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.fit_transform"><code class="docutils literal notranslate"><span class="pre">TSNE.fit_transform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.gradient_descent"><code class="docutils literal notranslate"><span class="pre">TSNE.gradient_descent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="t-sne-utils">
+<h1>t-SNE utils<a class="headerlink" href="#t-sne-utils" title="Link to this heading">#</a></h1>
+<section id="module-TSNE_code.TSNE_utils">
+<span id="tsne-code-tsne-utils-module"></span><h2>TSNE_code.TSNE_utils module<a class="headerlink" href="#module-TSNE_code.TSNE_utils" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">TSNE_code.TSNE_utils.</span></span><span class="sig-name descname"><span class="pre">TSNE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_components</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_exaggeration=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations_with_early_exaggeration=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric='euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter=1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps_probas=100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_grad_norm=1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_convergence_check=50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum_rule=&lt;function</span> <span class="pre">_momentum&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adaptive_learning_rate=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patience=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Create an instance of the class TSNE</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>n_components<span class="classifier">int </span></dt><dd><p>Dimension of the low-dimensional space to project data onto</p>
+</dd>
+<dt>perplexity<span class="classifier">float</span></dt><dd><p>The perplexity parameter balances the trade-off between preserving local
+and global structure in the data. It is a smoothing parameter that
+influences the effective number of nearest neighbors each point has during
+the algorithm’s optimization process. A higher perplexity value may
+capture more global structure, but it can also lead to more focus on
+global patterns at the expense of local details. Conversely, a lower
+perplexity may result in more emphasis on local details but might miss
+overarching patterns. Typical values range from 5 to 50, and the choice
+depends on the characteristics of the data.</p>
+</dd>
+<dt>early_exaggeration<span class="classifier">int, optional</span></dt><dd><p>Controls the initial spacing between clusters in the t-SNE visualization, by default 4</p>
+</dd>
+<dt>iterations_with_early_exaggeration<span class="classifier">int, optional</span></dt><dd><p>Number of iterations where ealy exaggeration is applied, by default 50</p>
+</dd>
+<dt>learning_rate<span class="classifier">float, optional</span></dt><dd><p>Initial value of the learning rate used for the gradient descent, by default None</p>
+</dd>
+<dt>metric<span class="classifier">str, optional</span></dt><dd><p>Metric to use to compute distances, by default “euclidean”</p>
+</dd>
+<dt>n_iter<span class="classifier">int, optional</span></dt><dd><p>Number of iterations for the gradient descent, by default 1000</p>
+</dd>
+<dt>n_steps_probas<span class="classifier">int, optional</span></dt><dd><p>Number of steps allowed for the binary search to find the value of the variance of the Gaussian
+to compute the matrix of joint probabilities on the high-dimensional space P, by default 100</p>
+</dd>
+<dt>min_grad_norm<span class="classifier">_type_, optional</span></dt><dd><p>If the norm of the gradient falls below this value, the gradient descent is stopped early, by default 1e-5</p>
+</dd>
+<dt>interval_convergence_check<span class="classifier">int, optional</span></dt><dd><p>Convergence will be checked every ‘interval_convergence_check’ iterations. A smaller number guarantees that potential
+convegence will be caught more quickly, but demands more computation time, by default 50</p>
+</dd>
+<dt>momentum_rule<span class="classifier">method, optional</span></dt><dd><p>The rule to apply for the momentum, must be a method taking t, the current gradient descent step, as single parameter. 
+If momentum is constant, define a function which returns said constant, by default -&gt; 0.5 if t &lt; 250 else 0.8</p>
+</dd>
+<dt>adaptive_learning_rate<span class="classifier">bool, optional</span></dt><dd><p>If True, the delta-bar-delta method is applied to adaptively adjust the learning rate during the gradient descent optimization process. 
+This adaptive learning rate can help improve convergence and performance, especially in cases where the scale of gradients varies 
+across dimensions, by default True</p>
+</dd>
+<dt>patience<span class="classifier">int, optional</span></dt><dd><p>Determines the number of consecutive epochs with no improvement of the KL divergence before the training process is stopped. 
+If None, the gradient descent will run for n_iter steps, whether there are improvements or not, by default None</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>fit_transform(X, reference_kl_divergence=None, title=None, verbose=0)</dt><dd><p>Fit X into a low-dimensional space.</p>
+</dd>
+</dl>
+</section>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">TSNE_code.TSNE_utils</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>  <span class="c1"># Replace with your actual data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reference_kl_divergence</span> <span class="o">=</span> <span class="mf">42.0</span>  <span class="c1"># Replace with your reference value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adaptive_learning_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">low_dim_representation</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">reference_kl_divergence</span><span class="o">=</span><span class="n">reference_kl_divergence</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Reference&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot the low-dimensional representation or perform further analysis</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence">
+<span class="sig-name descname"><span class="pre">dynamically_plot_kl_divergence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_bound_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(7,</span> <span class="pre">6)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.dynamically_plot_kl_divergence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence" title="Link to this definition">#</a></dt>
+<dd><p>Plot the evolution of the KL divergence up to step t.</p>
+<section id="id1">
+<h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>t<span class="classifier">int</span></dt><dd><p>Current step of the gradient descent</p>
+</dd>
+<dt>bar_length<span class="classifier">int, optional</span></dt><dd><p>Length of the progress bar to display underneath the figure, by default 50</p>
+</dd>
+<dt>lower_bound<span class="classifier">float, optional</span></dt><dd><p>Lower bound to display on the figure.
+Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</p>
+</dd>
+<dt>lower_bound_label<span class="classifier">str, optional</span></dt><dd><p>Label to give as a legend to the lower bound if one is provided, by default ‘’</p>
+</dd>
+<dt>figsize<span class="classifier">tuple, optional</span></dt><dd><p>Size of the figure to display, by default (7, 6)</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_kl_divergence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit X into a low-dimensional space.</p>
+<section id="id2">
+<h4>Parameters<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<dl>
+<dt>X<span class="classifier">numpy.ndarray, shape (n_samples, n_features)</span></dt><dd><p>Original data on the high-dimensional space</p>
+</dd>
+<dt>reference_kl_divergence<span class="classifier">float, optional</span></dt><dd><p>Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</p>
+</dd>
+<dt>title<span class="classifier">_type_, optional</span></dt><dd><p>Label to give as a legend to reference_kl_divergence, if one is provided, on the dynamic plots, by default None</p>
+</dd>
+<dt>verbose<span class="classifier">int, optional</span></dt><dd><dl class="simple">
+<dt>Verbosity level: 0 -&gt; no verbosity</dt><dd><p>1 -&gt; progress bar for the gradient descent
+2 -&gt; verbosity 1 + progress bars for the binary search for the computation of conditional probabilities
+3 -&gt; verbosity 2 + dynamic plot of the evolution of the KL divergence during gradient descent</p>
+</dd>
+</dl>
+<p>, by default 0</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h4>Returns<a class="headerlink" href="#returns" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>numpy.ndarray, shape (n_samples, n_components)</dt><dd><p>Projected data onto the low-dimensional space</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="TSNE_code.TSNE_utils.TSNE.gradient_descent">
+<span class="sig-name descname"><span class="pre">gradient_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_student_q_distances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/TSNE_code/TSNE_utils.html#TSNE.gradient_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#TSNE_code.TSNE_utils.TSNE.gradient_descent" title="Link to this definition">#</a></dt>
+<dd><p>Run one iteration of the gradient descent.</p>
+<section id="id3">
+<h4>Parameters<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>t<span class="classifier">int</span></dt><dd><p>Current step of the gradient descent</p>
+</dd>
+<dt>Y<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Projection of original data on low-dimensional space</p>
+</dd>
+<dt>P<span class="classifier">numpy.ndarray, shape (n_samples, n_features)</span></dt><dd><p>High-dimensional space joint probabilities</p>
+</dd>
+<dt>Q<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Low-dimensional space joint probabilities</p>
+</dd>
+<dt>t_student_q_distances<span class="classifier">numpy.ndarray, shape (n_samples, n_samples)</span></dt><dd><p>Array containing (1 / ||y_i - y_j||²), (y_i) elements of Y</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h4>Returns<a class="headerlink" href="#id4" title="Link to this heading">#</a></h4>
+<dl class="simple">
+<dt>gradient<span class="classifier">numpy.ndarray, shape (n_samples, n_components)</span></dt><dd><p>Gradient computed at step t</p>
+</dd>
+<dt>convergence<span class="classifier">bool</span></dt><dd><p>Whether the algorithm has converged yet</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">t-SNE code</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="TSNE_prob.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">t-SNE joint_probabilities</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-TSNE_code.TSNE_utils">TSNE_code.TSNE_utils module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE"><code class="docutils literal notranslate"><span class="pre">TSNE</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence"><code class="docutils literal notranslate"><span class="pre">TSNE.dynamically_plot_kl_divergence()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.fit_transform"><code class="docutils literal notranslate"><span class="pre">TSNE.fit_transform()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#TSNE_code.TSNE_utils.TSNE.gradient_descent"><code class="docutils literal notranslate"><span class="pre">TSNE.gradient_descent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Amadei, Kirscher, Klein
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023, Amadei, Kirscher, Klein.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

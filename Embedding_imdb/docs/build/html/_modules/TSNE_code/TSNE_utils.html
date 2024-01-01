@@ -1,0 +1,751 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TSNE_code.TSNE_utils &#8212; t-SNE  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/TSNE_code/TSNE_utils';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">t-SNE  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules.html">
+                        Embedding_imdb
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules.html">
+                        Embedding_imdb
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">TSNE_code.TSNE_utils</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for TSNE_code.TSNE_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics.pairwise</span> <span class="kn">import</span> <span class="n">pairwise_distances</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span><span class="p">,</span> <span class="n">prange</span> <span class="c1"># allows us to easily parallelize and optimize our code by compiling it</span>
+<span class="kn">from</span> <span class="nn">IPython</span> <span class="kn">import</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># local imports</span>
+<span class="kn">from</span> <span class="nn">TSNE_code.joint_probabilities</span> <span class="kn">import</span> <span class="n">compute_joint_probabilities</span>
+<span class="kn">from</span> <span class="nn">TSNE_code.deltaBarDelta</span> <span class="kn">import</span> <span class="n">DeltaBarDeltaOptimizer</span>
+
+
+<span class="n">EPSILON</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
+<span class="n">VERBOSE_NONE</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">VERBOSE_PROGRESS_BAR</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">VERBOSE_BINARY_SEARCH</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">VERBOSE_DYNAMIC_PLOTS</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_squared_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the squared pairwise distances.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X : numpy.ndarray, shape (n_samples, n_features)</span>
+<span class="sd">        Elements to compute the distances on</span>
+<span class="sd">    metric : str</span>
+<span class="sd">        Metric to compute distances with</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">        The matrix of squared pairwise_distances</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_compute_kl_divergence</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Kullback-Leibler divergence.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    P : numpy.ndarray, shape (n_samples, n_features)</span>
+<span class="sd">        High-dimensional space joint probabilities</span>
+<span class="sd">    Q : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">        Low-dimensional space joint probabilities</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Kullback-Leilbler divergence </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">P</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">EPSILON</span><span class="p">)</span> <span class="o">/</span> <span class="n">Q</span><span class="p">))</span>
+
+<span class="nd">@njit</span><span class="p">(</span><span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_compute_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">,</span> <span class="n">n_components</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the gradient of the KL divergence wrt the projection on the low-dimensional space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Y : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">        Projection of original data on low-dimensional space</span>
+<span class="sd">    P : numpy.ndarray, shape (n_samples, n_features)</span>
+<span class="sd">        High-dimensional space joint probabilities</span>
+<span class="sd">    Q : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">        Low-dimensional space joint probabilities</span>
+<span class="sd">    t_student_q_distances : numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">        Array containing (1 / ||y_i - y_j||²), (y_i) elements of Y</span>
+<span class="sd">    n_components : int</span>
+<span class="sd">        Dimension of low-dimensional space</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">        Gradient of KL divergence wrt Y</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_components</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">prange</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">sum_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_components</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">sum_</span> <span class="o">+=</span> <span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">Y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">t_student_q_distances</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">grad</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sum_</span>
+    <span class="k">return</span> <span class="n">grad</span>
+
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">_compute_t_student_distances</span><span class="p">(</span><span class="n">q_distances</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute low-dimensional affinities q_{ij}.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    q_distances : numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">        Squared pairwise distances of Y, the projection on the low-dimensional space </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Q : numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">        Matrix containing the low-dimensional affinities q_{ij}</span>
+<span class="sd">    t_student_q_distances : numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">        Array containing (1 / ||y_i - y_j||²), (y_i) elements of Y</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">t_student_q_distances</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">q_distances</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">t_student_q_distances</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t_student_q_distances</span><span class="p">)</span> <span class="o">-</span> <span class="n">t_student_q_distances</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># we remove the shape because the sum we divide by should not take into account </span>
+                                                                                                         <span class="c1"># elements on the diagonal of t_student_q_distances, all equal to 1</span>
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span>
+
+<span class="k">def</span> <span class="nf">_check_convergence</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">min_grad_norm</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether the norm of the gradient is lower than a fixed quantity&quot;&quot;&quot;</span>
+    <span class="n">grad_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">grad_norm</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">min_grad_norm</span>
+
+<span class="k">def</span> <span class="nf">_momentum</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default momentum rule&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">0.5</span> <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="mi">250</span> <span class="k">else</span> <span class="mf">0.8</span>
+
+
+<div class="viewcode-block" id="TSNE">
+<a class="viewcode-back" href="../../TSNE_code.html#TSNE_code.TSNE_utils.TSNE">[docs]</a>
+<span class="k">class</span> <span class="nc">TSNE</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an instance of the class TSNE</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_components : int </span>
+<span class="sd">            Dimension of the low-dimensional space to project data onto</span>
+<span class="sd">        perplexity : float</span>
+<span class="sd">            The perplexity parameter balances the trade-off between preserving local</span>
+<span class="sd">            and global structure in the data. It is a smoothing parameter that</span>
+<span class="sd">            influences the effective number of nearest neighbors each point has during</span>
+<span class="sd">            the algorithm&#39;s optimization process. A higher perplexity value may</span>
+<span class="sd">            capture more global structure, but it can also lead to more focus on</span>
+<span class="sd">            global patterns at the expense of local details. Conversely, a lower</span>
+<span class="sd">            perplexity may result in more emphasis on local details but might miss</span>
+<span class="sd">            overarching patterns. Typical values range from 5 to 50, and the choice</span>
+<span class="sd">            depends on the characteristics of the data.</span>
+<span class="sd">        early_exaggeration : int, optional</span>
+<span class="sd">            Controls the initial spacing between clusters in the t-SNE visualization, by default 4</span>
+<span class="sd">        iterations_with_early_exaggeration : int, optional</span>
+<span class="sd">            Number of iterations where ealy exaggeration is applied, by default 50</span>
+<span class="sd">        learning_rate : float, optional</span>
+<span class="sd">            Initial value of the learning rate used for the gradient descent, by default None</span>
+<span class="sd">        metric : str, optional</span>
+<span class="sd">            Metric to use to compute distances, by default &quot;euclidean&quot;</span>
+<span class="sd">        n_iter : int, optional</span>
+<span class="sd">            Number of iterations for the gradient descent, by default 1000</span>
+<span class="sd">        n_steps_probas : int, optional</span>
+<span class="sd">            Number of steps allowed for the binary search to find the value of the variance of the Gaussian</span>
+<span class="sd">            to compute the matrix of joint probabilities on the high-dimensional space P, by default 100</span>
+<span class="sd">        min_grad_norm : _type_, optional</span>
+<span class="sd">            If the norm of the gradient falls below this value, the gradient descent is stopped early, by default 1e-5</span>
+<span class="sd">        interval_convergence_check : int, optional</span>
+<span class="sd">            Convergence will be checked every &#39;interval_convergence_check&#39; iterations. A smaller number guarantees that potential</span>
+<span class="sd">            convegence will be caught more quickly, but demands more computation time, by default 50</span>
+<span class="sd">        momentum_rule : method, optional</span>
+<span class="sd">            The rule to apply for the momentum, must be a method taking t, the current gradient descent step, as single parameter. </span>
+<span class="sd">            If momentum is constant, define a function which returns said constant, by default -&gt; 0.5 if t &lt; 250 else 0.8</span>
+<span class="sd">        adaptive_learning_rate : bool, optional</span>
+<span class="sd">            If True, the delta-bar-delta method is applied to adaptively adjust the learning rate during the gradient descent optimization process. </span>
+<span class="sd">            This adaptive learning rate can help improve convergence and performance, especially in cases where the scale of gradients varies </span>
+<span class="sd">            across dimensions, by default True</span>
+<span class="sd">        patience : int, optional</span>
+<span class="sd">            Determines the number of consecutive epochs with no improvement of the KL divergence before the training process is stopped. </span>
+<span class="sd">            If None, the gradient descent will run for n_iter steps, whether there are improvements or not, by default None</span>
+<span class="sd">            </span>
+<span class="sd">        Methods</span>
+<span class="sd">        -------</span>
+<span class="sd">        fit_transform(X, reference_kl_divergence=None, title=None, verbose=0)</span>
+<span class="sd">            Fit X into a low-dimensional space.</span>
+<span class="sd">            </span>
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from TSNE_code.TSNE_utils import TSNE</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; X = np.random.rand(100, 50)  # Replace with your actual data</span>
+<span class="sd">        &gt;&gt;&gt; reference_kl_divergence = 42.0  # Replace with your reference value</span>
+<span class="sd">        &gt;&gt;&gt; tsne = TSNE(n_components=2, perplexity=30, adaptive_learning_rate=True, patience=50)</span>
+<span class="sd">        &gt;&gt;&gt; low_dim_representation = tsne.fit_transform(X, reference_kl_divergence=reference_kl_divergence, title=&#39;Reference&#39;, verbose=3)</span>
+<span class="sd">        &gt;&gt;&gt; # Plot the low-dimensional representation or perform further analysis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_components</span><span class="p">,</span> <span class="n">perplexity</span><span class="p">,</span> <span class="n">early_exaggeration</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">iterations_with_early_exaggeration</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> 
+                 <span class="n">n_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_steps_probas</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_grad_norm</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">interval_convergence_check</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">momentum_rule</span><span class="o">=</span><span class="n">_momentum</span><span class="p">,</span> <span class="n">adaptive_learning_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span> <span class="o">=</span> <span class="n">n_components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perplexity</span> <span class="o">=</span> <span class="n">perplexity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_exaggeration</span> <span class="o">=</span> <span class="n">early_exaggeration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iterations_with_early_exaggeration</span> <span class="o">=</span> <span class="n">iterations_with_early_exaggeration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="n">learning_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_steps_probas</span> <span class="o">=</span> <span class="n">n_steps_probas</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_grad_norm</span> <span class="o">=</span> <span class="n">min_grad_norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interval_convergence_check</span> <span class="o">=</span> <span class="n">interval_convergence_check</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">momentum_rule</span> <span class="o">=</span> <span class="n">momentum_rule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaptive_learning_rate</span> <span class="o">=</span> <span class="n">adaptive_learning_rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patience</span> <span class="o">=</span> <span class="n">patience</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">kl_divergence</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="kc">None</span>
+        
+<div class="viewcode-block" id="TSNE.gradient_descent">
+<a class="viewcode-back" href="../../TSNE_code.html#TSNE_code.TSNE_utils.TSNE.gradient_descent">[docs]</a>
+    <span class="k">def</span> <span class="nf">gradient_descent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run one iteration of the gradient descent.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : int</span>
+<span class="sd">            Current step of the gradient descent</span>
+<span class="sd">        Y : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">            Projection of original data on low-dimensional space</span>
+<span class="sd">        P : numpy.ndarray, shape (n_samples, n_features)</span>
+<span class="sd">            High-dimensional space joint probabilities</span>
+<span class="sd">        Q : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">            Low-dimensional space joint probabilities</span>
+<span class="sd">        t_student_q_distances : numpy.ndarray, shape (n_samples, n_samples)</span>
+<span class="sd">            Array containing (1 / ||y_i - y_j||²), (y_i) elements of Y</span>
+<span class="sd">            </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        gradient : numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">            Gradient computed at step t</span>
+<span class="sd">        convergence : bool</span>
+<span class="sd">            Whether the algorithm has converged yet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterations_with_early_exaggeration</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">_compute_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">early_exaggeration</span><span class="o">*</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gradient</span> <span class="o">=</span> <span class="n">_compute_gradient</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">)</span>
+
+        <span class="n">convergence</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">interval_convergence_check</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">convvergence</span> <span class="o">=</span> <span class="n">_check_convergence</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_grad_norm</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">convergence</span></div>
+
+
+    
+<div class="viewcode-block" id="TSNE.dynamically_plot_kl_divergence">
+<a class="viewcode-back" href="../../TSNE_code.html#TSNE_code.TSNE_utils.TSNE.dynamically_plot_kl_divergence">[docs]</a>
+    <span class="k">def</span> <span class="nf">dynamically_plot_kl_divergence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lower_bound_label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">)):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot the evolution of the KL divergence up to step t.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : int</span>
+<span class="sd">            Current step of the gradient descent</span>
+<span class="sd">        bar_length : int, optional</span>
+<span class="sd">            Length of the progress bar to display underneath the figure, by default 50</span>
+<span class="sd">        lower_bound : float, optional</span>
+<span class="sd">            Lower bound to display on the figure.</span>
+<span class="sd">            Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</span>
+<span class="sd">        lower_bound_label : str, optional</span>
+<span class="sd">            Label to give as a legend to the lower bound if one is provided, by default &#39;&#39;</span>
+<span class="sd">        figsize : tuple, optional</span>
+<span class="sd">            Size of the figure to display, by default (7, 6)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;height_ratios&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+        
+        <span class="c1"># Plot KL divergence on the upper subplot</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Custom&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptive_learning_rate</span> <span class="k">else</span> <span class="s1">&#39;Custom + adaptive lr&#39;</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>      
+        <span class="k">if</span> <span class="n">lower_bound</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">)],</span> <span class="p">[</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">lower_bound_label</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;KL divergence through gradient descent&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Progress bar in the lower subplot</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+        <span class="n">progress_value</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span>
+        <span class="n">bar</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">bar_length</span> <span class="o">*</span> <span class="n">progress_value</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">bar_length</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">bar_length</span> <span class="o">*</span> <span class="n">progress_value</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Progress: </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="n">progress_value</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">% </span><span class="si">{</span><span class="n">bar</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+        <span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="n">display</span><span class="o">.</span><span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+        
+
+<div class="viewcode-block" id="TSNE.fit_transform">
+<a class="viewcode-back" href="../../TSNE_code.html#TSNE_code.TSNE_utils.TSNE.fit_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">reference_kl_divergence</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fit X into a low-dimensional space.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : numpy.ndarray, shape (n_samples, n_features)</span>
+<span class="sd">            Original data on the high-dimensional space</span>
+<span class="sd">        reference_kl_divergence : float, optional</span>
+<span class="sd">            Typically the final KL divergence of another instance of t-SNE we want to compare the current instance with, by default None</span>
+<span class="sd">        title : _type_, optional</span>
+<span class="sd">            Label to give as a legend to reference_kl_divergence, if one is provided, on the dynamic plots, by default None</span>
+<span class="sd">        verbose : int, optional</span>
+<span class="sd">            Verbosity level: 0 -&gt; no verbosity</span>
+<span class="sd">                             1 -&gt; progress bar for the gradient descent</span>
+<span class="sd">                             2 -&gt; verbosity 1 + progress bars for the binary search for the computation of conditional probabilities</span>
+<span class="sd">                             3 -&gt; verbosity 2 + dynamic plot of the evolution of the KL divergence during gradient descent</span>
+<span class="sd">            , by default 0</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray, shape (n_samples, n_components)</span>
+<span class="sd">            Projected data onto the low-dimensional space</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">squared_distances</span> <span class="o">=</span> <span class="n">_compute_squared_distances</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">compute_joint_probabilities</span><span class="p">(</span><span class="n">squared_distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">perplexity</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_steps_probas</span><span class="p">,</span> <span class="n">ENTROPY_TOLERANCE</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">display_tqdm</span><span class="o">=</span><span class="p">(</span><span class="n">verbose</span><span class="o">&gt;=</span><span class="n">VERBOSE_BINARY_SEARCH</span><span class="p">))</span>
+
+        <span class="c1"># initial solution samples from a multivariate centered normal</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">),</span> <span class="mf">1e-4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">previous_Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="c1"># will be used to store value of Y(t-1)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">VERBOSE_PROGRESS_BAR</span> <span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting gradient descent loop...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">early_exaggeration</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">DeltaBarDeltaOptimizer</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patience</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">best_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+            <span class="n">step_best_error</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">range_</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="ow">in</span> <span class="p">[</span><span class="n">VERBOSE_PROGRESS_BAR</span> <span class="p">,</span> <span class="n">VERBOSE_BINARY_SEARCH</span> <span class="p">]</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">range_</span><span class="p">:</span>
+
+            <span class="n">q_distances</span> <span class="o">=</span> <span class="n">pairwise_distances</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span> <span class="o">=</span> <span class="n">_compute_t_student_distances</span><span class="p">(</span><span class="n">q_distances</span><span class="p">)</span>
+            
+            <span class="c1"># gradient descent</span>
+            <span class="n">gradient</span><span class="p">,</span> <span class="n">convergence_check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gradient_descent</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">t_student_q_distances</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">convergence_check</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">VERBOSE_PROGRESS_BAR</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Algorithm has converged at step </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span>
+                
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">patience</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kl_divergence</span> <span class="o">=</span> <span class="n">_compute_kl_divergence</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kl_divergence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kl_divergence</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">kl_divergence</span> <span class="o">&lt;=</span> <span class="n">best_error</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">iterations_with_early_exaggeration</span><span class="p">:</span>
+                    <span class="n">best_error</span> <span class="o">=</span> <span class="n">kl_divergence</span>
+                    <span class="n">step_best_error</span> <span class="o">=</span> <span class="n">t</span>
+                    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">VERBOSE_DYNAMIC_PLOTS</span>  <span class="ow">and</span> <span class="p">(</span><span class="n">t</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">t</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iter</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                        <span class="n">title</span> <span class="o">=</span> <span class="n">title</span> <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s1">&#39;reference KL divergence&#39;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dynamically_plot_kl_divergence</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">lower_bound</span><span class="o">=</span><span class="n">reference_kl_divergence</span><span class="p">,</span> <span class="n">lower_bound_label</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+                        
+                <span class="k">elif</span> <span class="n">t</span> <span class="o">-</span> <span class="n">step_best_error</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">patience</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="n">VERBOSE_PROGRESS_BAR</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Algorithm has stopped at step </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span>
+
+            <span class="n">learning_rate</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gradient</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptive_learning_rate</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">learning_rate</span>
+            <span class="n">momentum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">momentum_rule</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">Y_t_plus_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">-</span> <span class="n">learning_rate</span> <span class="o">*</span> <span class="n">gradient</span> <span class="o">+</span> <span class="n">momentum</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">-</span> <span class="n">previous_Y</span><span class="p">)</span>
+
+            <span class="c1"># update Ys</span>
+            <span class="n">previous_Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y_t_plus_1</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span></div>
+</div>
+
+ 
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Amadei, Kirscher, Klein.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
