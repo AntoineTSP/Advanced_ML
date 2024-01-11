@@ -19,6 +19,14 @@ The t-SNE functions are all explained through docstrings. We also leveraged the 
 
 To view this documentation, navigate to the `build/html/index.html` file or click [here](build/html/index.html).
 
+## t-SNE on famous test datasets
+We applied our t-SNE implementation on the MNIST and Olivetti datasets, to verify that our implementation was correct, and to compare it to Scikit-Learn's. <br>
+Those comparisons can be found in the folders **MNIST** and **Olivetti**, which contain notebooks with our comparative studies.
+
+## LSTM and embedding
+The training of the LSTM model on the IMDB dataset can be found in the notebook **LSTM.ipynb**. It also contains the visualization of the word embedding through different t-SNE instances. <br>
+The interactive 3D plot of the 3D t-SNE applied to our word embedding can be found in **interactive_3d_plot.html**.
+
 ## Reference paper
 
  [Visualizing Data using t-SNE](https://jmlr.org/papers/v9/vandermaaten08a.html),
